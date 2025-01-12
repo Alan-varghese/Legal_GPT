@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:lottie/lottie.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,6 +24,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
+  // Prompts and Colors
   final List<String> prompts = [
     "Let's Explore",
     "Let's Create",
@@ -51,30 +51,30 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
 
     // Animation controller
     _controller = AnimationController(
-      duration: Duration(seconds: 1),
+      duration: Duration(seconds: 2),
       vsync: this,
     );
 
-    // Initialize first background animation
-    _backgroundAnimation = ColorTween(
-      begin: backgroundColors[0],
-      end: backgroundColors[1],
-    ).animate(_controller);
-
-    // Timer to change prompts and backgrounds every 2 seconds
-    Timer.periodic(Duration(seconds: 2), (timer) {
+    // Start timer to update prompt and background every 2 seconds
+    Timer.periodic(Duration(seconds: 2), (Timer timer) {
       setState(() {
         _currentIndex = (_currentIndex + 1) % prompts.length;
 
-        // Update background animation to transition to the next color
+        // Start background color animation
         _backgroundAnimation = ColorTween(
-          begin: _backgroundAnimation.value,
-          end: backgroundColors[_currentIndex],
+          begin: backgroundColors[_currentIndex],
+          end: backgroundColors[(_currentIndex + 1) % prompts.length],
         ).animate(_controller);
 
         _controller.forward(from: 0.0);
       });
     });
+
+    // Initialize first animation
+    _backgroundAnimation = ColorTween(
+      begin: backgroundColors[0],
+      end: backgroundColors[1],
+    ).animate(_controller);
 
     _controller.forward();
   }
@@ -98,30 +98,63 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Animated Legal Icon
-                Lottie.asset(
-                  'assets/legal_animation.json', // Path to your Lottie file
-                  height: 150,
-                  width: 150,
-                ),
-                SizedBox(height: 20),
                 // Title: Legal GPT
                 Text(
                   "Legal GPT",
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white, // Text remains white
+                    color: Colors.white, // Fixed white text
                   ),
                 ),
                 SizedBox(height: 20),
-                // Dynamic Prompt Text
+                // Prompt text
                 Text(
                   prompts[_currentIndex],
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white, // Text remains white
+                    color: Colors.white, // Fixed white text
+                  ),
+                ),
+                SizedBox(height: 40),
+                // Sign Up Button
+                ElevatedButton(
+                  onPressed: () {
+                    // Handle Sign Up
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.blue, backgroundColor: Colors.white,
+                    minimumSize: Size(200, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  child: Text(
+                    'Sign Up',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                // Login Button
+                ElevatedButton(
+                  onPressed: () {
+                    // Handle Login
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white, backgroundColor: Colors.blue,
+                    minimumSize: Size(200, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  child: Text(
+                    'Login',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ],
